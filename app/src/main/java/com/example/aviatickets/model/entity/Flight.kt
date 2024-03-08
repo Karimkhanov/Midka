@@ -1,5 +1,8 @@
 package com.example.aviatickets.model.entity
 
+/**
+ * think about json deserialization considering its snake_case format
+ */
 data class Flight(
     val departureLocation: Location,
     val arrivalLocation: Location,

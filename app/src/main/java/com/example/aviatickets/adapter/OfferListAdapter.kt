@@ -15,6 +15,10 @@ class OfferListAdapter : RecyclerView.Adapter<OfferListAdapter.ViewHolder>() {
         items.clear()
         items.addAll(offerList)
         notifyDataSetChanged()
+
+        /**
+         * think about recycler view optimization using diff.util
+         */
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

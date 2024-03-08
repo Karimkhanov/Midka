@@ -9,4 +9,8 @@ object ApiClient {
         .baseUrl("YOUR_BASE_URL")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+
+    /**
+     * think about performing network request
+     */
 }
