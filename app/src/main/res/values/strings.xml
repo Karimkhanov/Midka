@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">aviatickets</string>
+    <string name="route_fmt">%1$s — %2$s</string>
+    <string name="time_fmt">%1$s час %2$s мин</string>
+    <string name="direct">прямой</string>
+    <string name="price_fmt">%1$s ₸</string>
+    <string name="sort">Сортировка</string>
+    <string name="sort_by_price">По цене (по возрастанию)</string>
+    <string name="sort_by_duration">По длительности полета (по возрастанию)</string>
 </resources>
