@@ -31,7 +31,7 @@ Bonus Task: add images of all airlines using Glide. There is already an ImageVie
 
 ## Submission
 
-1. Make your repository **private** and include @estharossa as a collaborator
+1. Make your repository **private** and include estharossa as a collaborator
 2. Submit the [form](https://forms.gle/PK1pnQyXmxrCAwa99)
 
 ## License
