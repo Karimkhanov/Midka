@@ -31,8 +31,8 @@ Bonus Task: add images of all airlines using Glide. There is already an ImageVie
 
 ## Submission
 
-Create a pull request with your changes targeting branch **main**. 
-Include your name, surname and ID in a pull request description.
+1. Make your repository **private** and include @estharossa as a collaborator
+2. Submit the [form](https://forms.gle/PK1pnQyXmxrCAwa99)
 
 ## License
 
