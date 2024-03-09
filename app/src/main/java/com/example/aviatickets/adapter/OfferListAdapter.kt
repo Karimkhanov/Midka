@@ -2,74 +2,66 @@ package com.example.aviatickets.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.aviatickets.R
-import com.example.aviatickets.databinding.ItemOfferBinding
+import com.bumptech.glide.Glide
+import com.example.aviatickets.databinding.OfferItemBinding
+import com.example.aviatickets.model.entity.Flight
 import com.example.aviatickets.model.entity.Offer
 
-class OfferListAdapter : RecyclerView.Adapter<OfferListAdapter.ViewHolder>() {
+class OfferListAdapter : RecyclerView.Adapter<OfferListAdapter.OfferViewHolder>() {
+    private var offers = mutableListOf<Offer>()
 
-    private val items: ArrayList<Offer> = arrayListOf()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferViewHolder {
+        val binding = OfferItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return OfferViewHolder(binding)
+    }
 
-    fun setItems(offerList: List<Offer>) {
-        items.clear()
-        items.addAll(offerList)
+    override fun onBindViewHolder(holder: OfferViewHolder, position: Int) {
+        holder.bind(offers[position])
+    }
+
+    override fun getItemCount(): Int = offers.size
+
+    fun setItems(newOffers: List<Offer>) {
+        val diffResult = DiffUtil.calculateDiff(OfferDiffCallback(this.offers, newOffers))
+        this.offers.clear()
+        this.offers.addAll(newOffers)
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun sortByPrice() {
+        offers.sortBy { it.price }
         notifyDataSetChanged()
-
-        /**
-         * think about recycler view optimization using diff.util
-         */
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            ItemOfferBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+    fun sortByDuration() {
+        offers.sortBy { it.duration }
+        notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int {
-        return items.size
+    class OfferViewHolder(private val binding: OfferItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(flight: Flight) {
+            binding.departureTime.text = flight.departureTimeInfo
+            binding.route.text = "${flight.departureLocation.code} - ${offer.flight.arrivalLocation.code}"
+            binding.arrivalTime.text = flight.arrivalTimeInfo
+            binding.duration.text = "${flight.duration} мин"
+            binding.price.text = "${flight.price} ₸"
+            Glide.with(airlineImage.context)
+                .load(offer.flight.airline.imageUrl)
+                .into(airlineImage)
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-    }
-
-    inner class ViewHolder(
-        private val binding: ItemOfferBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        private val context = binding.root.context
-
-        fun bind(offer: Offer) {
-            val flight = offer.flight
-
-            with(binding) {
-                departureTime.text = flight.departureTimeInfo
-                arrivalTime.text = flight.arrivalTimeInfo
-                route.text = context.getString(
-                    R.string.route_fmt,
-                    flight.departureLocation.code,
-                    flight.arrivalLocation.code
-                )
-                duration.text = context.getString(
-                    R.string.time_fmt,
-                    getTimeFormat(flight.duration).first.toString(),
-                    getTimeFormat(flight.duration).second.toString()
-                )
-                direct.text = context.getString(R.string.direct)
-                price.text = context.getString(R.string.price_fmt, offer.price.toString())
-            }
+    class OfferDiffCallback(private val oldList: List<Offer>, private val newList: List<Offer>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldList.size
+        override fun getNewListSize(): Int = newList.size
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
         }
 
-        private fun getTimeFormat(minutes: Int): Pair<Int, Int> = Pair(
-            first = minutes / 60,
-            second = minutes % 60
-        )
-
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
     }
 }
